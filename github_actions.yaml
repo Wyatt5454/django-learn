@@ -1,0 +1,35 @@
+# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
+
+name: Django CI
+on:
+  push:
+    # Logic to run only on main branch, such as with tags to indicate a release
+    branches: [main]
+    # tags:
+    #   - 'v*'
+    #Logic to run on all pull requests to target source branch, so all PR targeting merge to main
+  pull_request:
+    # branches: [ main ]
+
+jobs:
+  build:
+  lint_project:
+    runs-on: ubuntu-latest # operating system your code will run on
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+      - run: pip install flake8
+      - run: pytest . # run pytest test
+      - run: flake8 . # run flake8 test
+      - run: "echo Finished with app lint moving to test stage"
+  test_project:
+    runs-on: ubuntu-latest # operating system your code will run on
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+      - run: pip install flake8
+      # - run: pip install -r requirements.txt # install all our dependencies for the project
+      - run: pytest . # run pytest test
+      - run: flake8 . # run flake8 test
+      - run: "echo finished with test, pipeline success, merge allowed"
