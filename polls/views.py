@@ -3,6 +3,9 @@ from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 from django.views import generic
 from django.utils import timezone
+import json
+
+from django.http import HttpResponse
 
 from .models import Choice, Question
 
@@ -34,6 +37,12 @@ class DetailView(generic.DetailView):
 class ResultsView(generic.DetailView):
     model = Question
     template_name = "polls/results.html"
+    
+def JSON_Response(request):
+    response_data = {}
+    response_data['result'] = 'error'
+    response_data['message'] = 'Some error message'
+    return HttpResponse(json.dumps(response_data), content_type="application/json")
 
 
 
